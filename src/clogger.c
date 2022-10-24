@@ -91,10 +91,7 @@ void clogger_log(loglvl level, const char* src, int line, const char* message, .
         .format=message
     };
     bool was_set = set_time(&l);
-    if (!was_set) { // No need to work with a null ptr
-        free(l.time);
-        return; 
-    }
+    if (!was_set) return; // No need to work with a null ptr
 
     // 1. Print to file
     va_start(l.args, message);
