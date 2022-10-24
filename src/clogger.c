@@ -46,13 +46,15 @@ static const char* BORING = "\x1b[38;5;245m";
 #endif
 
 #define CLOG_TIME_LENGTH 9
-static void set_time(log_event* l) {
+static bool set_time(log_event* l) {
     time_t current = time(NULL);
     if (current == (time_t)(-1))
         current = (time_t)(0);
     struct tm* timeinfo = localtime(&current);
     l->time = malloc(sizeof(char) * CLOG_TIME_LENGTH);
+    if (l->time == NULL) return false;
     strftime(l->time, CLOG_TIME_LENGTH, "%H:%M:%S", timeinfo);
+    return true;
 }
 
 
@@ -88,7 +90,11 @@ void clogger_log(loglvl level, const char* src, int line, const char* message, .
         .line=line,
         .format=message
     };
-    set_time(&l);
+    bool was_set = set_time(&l);
+    if (!was_set) { // No need to work with a null ptr
+        free(l.time);
+        return; 
+    }
 
     // 1. Print to file
     va_start(l.args, message);
