@@ -8,6 +8,5 @@ project(clogger
 add_definitions("-DCLOGGER_USE_COLOR=1")
 
 add_library(clogger 
-    include/clogger.h
-    src/clogger.c)
-target_include_directories(clogger PUBLIC include)
+    clogger.h
+    clogger.c)
