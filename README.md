@@ -11,11 +11,11 @@ The goal of this project is to make a logging library in one weekend (or so) tha
 ## Usage
 Add the following #defines somewhere in your project: `CLOGGER_USE_COLOR=1` (or 0 for no color) and `SOURCE_PATH_SIZE=X` where X is the length (in characters of the root directory of your project. 
 
-If you use CMake, the included CMakeLists will set these up for you, specifically these lines:
+If you use CMake, add the following definitions to the root of your cmake project.
 ```cmake
 # Logger Required Definitions
-string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
-add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
+string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)    # required 
+add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}") # required
 add_definitions("-DCLOGGER_USE_COLOR=1")
 ```
 
