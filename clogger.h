@@ -3,6 +3,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdbool.h>
+
+#ifndef CLOGGER_USE_COLOR
+#define CLOGGER_USE_COLOR 0
+#endif
+
 typedef enum {
     TRACE,
     DEBUG,
