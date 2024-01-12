@@ -31,7 +31,8 @@ void set_logger_outfile(char* filename) {
 
 static const char* levels[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
 
-#if CLOGGER_USE_COLOR
+// This used to be excluded if you didn't build the library with colors,
+// but required a pointless-looking macro wrapper to save ~80 bytes.
 static const char* colors[] = { 
     "\x1b[38;5;33m", // Trace Blue
     "\x1b[38;5;39m", // Debug Light blue
@@ -43,7 +44,6 @@ static const char* colors[] = {
 
 static const char* RESET = "\x1b[33;0m";
 static const char* BORING = "\x1b[38;5;245m";
-#endif
 
 #define CLOG_TIME_LENGTH 9
 static bool set_time(log_event* l) {
@@ -56,12 +56,12 @@ static bool set_time(log_event* l) {
     strftime(l->time, CLOG_TIME_LENGTH, "%H:%M:%S", timeinfo);
     return true;
 }
+#undef CLOG_TIME_LENGTH
 
 
 static void clogger_print_out(void* stream, log_event* l, bool print_color) {
     if (stream == NULL || l == NULL) return;
     if (print_color) {
-#if CLOGGER_USE_COLOR
         fprintf(stream, 
                 "%s%s %s%s\t%s%s:%d\t->%s ",
                 BORING, l->time,
@@ -69,7 +69,6 @@ static void clogger_print_out(void* stream, log_event* l, bool print_color) {
                 BORING, l->fname, l->line,
                 RESET
         );
-#endif
     } else {
         fprintf(stream, "%s %s\t%s:%d\t-> ",
                 l->time,
